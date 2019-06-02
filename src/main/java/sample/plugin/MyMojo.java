@@ -58,7 +58,20 @@ public class MyMojo extends AbstractMojo {
 
         File dir = outputDirectory;
 
-        if (!dir.exists()) {
+        if (dir.exists()) {
+            for (File file : dir.listFiles()) {
+                if(file.isDirectory()) {
+                    try {
+                        FileUtils.forceDelete(file);
+                    } catch (IOException e) {
+                        getLog().warn("出力先のクリーンアップに失敗。", e);
+                        e.printStackTrace();
+                    }
+                    
+                }
+            }
+        }
+        else {
             dir.mkdirs();
         }
 
